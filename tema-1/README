@@ -1,0 +1,100 @@
+/* Kullman Alexandru 323CA */
+
+# Problema 1. Walsh 
+
+Pentru problema Walsh, abordarea a fost de tip Divide et Impera.
+
+- Se porneste de la setul de coordonate x si y.
+- Se gaseste cadranul din matricea cu dimensiunea n in care acestea se afla
+- Se restrange problema la o problema mai mica, in care noua matrice are
+  jumatate din dimensiunea initiala, iar coordonatele sunt "deplasate" in
+  functie de cadran
+- x-ul se modifica pentru cadranele II si IV, iar y-ul pentru III  si IV
+- In cazul in care cadranul gasit este IV, se va returna inversul valorii gasite
+  in urmatorul apel (pt 0 se va returna 1 si viceversa)
+- Atunci cand se gaseste o matrice de dimensiune 2x2, se va returna o anumita
+  valoare in functie de cadran (1 pt cadranul IV, 0 pt restul)
+- Complexitatea in timp pentru rezolvarea problemei este O(log n)
+- Daca luam in considerare intregul program, complexitatea totala, cu
+  aflarea valorii pentru fiecare pereche in parte este O (k * log n)
+
+
+# Problema 2. Statistics
+
+Pentru problema Statistics, abordarea a fost de tip Greedy
+
+- String-urile sunt stocate intr-un ArrayList si este initializat contorul cu 0
+- Pentru fiecare litera in parte a alfabetului englez, se sorteaza vectorul de
+  cuvinte in functie de permisivitatea pe care acesta o ofera, apoi dupa
+  lungime
+- Functia *getFrequency* calculeaza numarul de aparitii al caracterului curent
+  in string-ul dat ca parametru si returneaza permisivitatea oferita de string.
+- Notand caracterul cautat cu 'ch', permisivitatea este egala cu numarul de
+  caractere diferite de 'ch' pe care le mai putem concatena, astfel incat
+  'ch' sa ramana litera dominanta.
+- Se verifica daca in urma sortarii, primul cuvant contine caracterul curent
+	* daca da, atunci se continua algoritmul
+	* daca nu, se trece la urmatoarea litera
+- Functia de concatStrings simuleaza concatenarea string-urilor in urma
+  sortarii si "concateneaza" atata timp cat permisivitatea este > 0 (se 
+  respecta proprietatea din enunt, referitoare la litera dominanta)
+- Complexitatea tine cont de numarul de litere de la a la z (=26) si de
+  iteratiile prin string-uri si sortare. In total, complexitatea va fi
+  O(26 * nlogn) = O (n log n)
+
+
+# Problema 3. Prinel
+
+Pentru problma Prinel, abordarea a fost de tip Programare Dinamica
+
+- Sunt verificate 2 cazuri speciale.
+	* daca valoarea maxima a costului permis este 0, atunci verificam daca exista
+        un target diferit de 1 si returnam 0
+	* daca suma operatiilor pentru toate elementele target este mai mica decat k,
+	  atunci returnam suma punctelor, fiind atinse toate target-urile
+- Cazul general consta in reducerea problemei la problema rucsacului, fiind
+  retinute doar linia anterioara si linia curenta pentru a eficientiza memoria
+  folosita.
+- Functia *getNoOperations* construieste un vector dp, cu proprietatea ca
+  dp[i] = numarul minim de operatii pentru a ajunge la i.
+	- se initializeaza fiecare element cu numarul maxim de pasi (=propria valoare)
+	- se porneste de la i = 1 si pentru fiecare divizor al lui i, se calculeaza
+	  numarul de operatii pentru a ajunge la (i + divizor).
+      - pentru a eficientiza, se ajunge doar pana la sqrt(i), iar la pasul i
+	  se ia in considerare atat div, cat si divizorul din cealalta jumatate
+	  (= i / div)
+- Complexitatea in timp este O(n * k) din reducerea la problema rucsacului.
+
+
+# Problema 4. Crypto
+
+ Pentru problema Crypto, abordarea a fost de tip Programare Dinamica
+ 
+ - Se foloseste un sablon pentru a determina numarul de aparitii a unui subsir
+   intr-un string.
+ - Astfel, se calculeaza numarul de aparitii a fiecarui substring din subsir
+   in fiecare subsir din string, iar ultimul rezultat are semnificatia
+   aparitiilor totale a subsirului in string.
+ - dp[i][j]: are semnificatia ca in string-ul format din primele i caractere
+   sirul format din primele j caractere se gaseste de dp[i][j] ori.
+ - de aceea, se initializeaza, pentru functionarea corecta a algoritmului
+   dp[0][0] cu 1,
+   	* prima coloana este initializata cu 1, daca al (i-1)-lea
+   	caracter din string e cunoscut
+	* un element j de pe coloana este inmultit cu numarul de caractere diferite
+        din subsir, daca al (i-1)lea caracter este necunoscut (= '?')
+- se compara ultimele litere din sir si subsir la fiecare pas
+  (al i-1 lea din sir cu al j-1 lea din subsir)
+	* daca este '?'
+		- trebuie sa se tina cont de numarul de posibilitati oferite de inlocuirea
+		  caracterului cu o litera diferita din substring.
+	* daca sunt egale
+		- la fiecare aparitie a substring-ului, se adauga aparitiile substring-ului
+		  pana la caracterul j - 2.
+	* altfel
+		- noul numar de aparitii al substring-ului pana la j - 1 este egal cu
+		  numarul de aparitii de la pasul anterior.
+- se utilizeaza % MOD, MOD = 10^9 + 7, din cauza posibilitatii obtinerii unui
+  numar foarte mare de aparitii in sir.
+- Complexitatea este de O(N * L), unde N si L sunt dimensiunile sirului,
+  respectiv subsirului
